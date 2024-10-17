@@ -1,0 +1,30 @@
+﻿@model ClinicInTheClouds.Models.LoginViewModel
+@{ViewBag.Title = "Log in";}
+@using (Html.BeginForm("LogIn", "Account", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div id="lw" class="login-wrapper">
+        <div id="login-cont">
+            <div id="login-header" class="d-flex flex-column justify-content-center align-items-center">
+                <img class="mt-2" src="~/Content/Images/logo.60px.png" />
+                <div class="jose mt-2" style="font-size:26px;font-weight:300;color:white;">CLINIC IN THE CLOUDS</div>
+                <div id="login-close" class="ion-ios-close-outline modal-close-button"></div>
+            </div>
+            <div id="login-body" class="noise-e9f d-flex flex-column justify-content-center align-items-center">
+                <div id="login-body-wrapper">
+                    <div class="form-label mb-0">Email:</div>
+                    @Html.TextBoxFor(model => model.Email, new { @class = "form-input" })
+                    <div id="login-password-wrapper" class="mb-0  mt-2" style="vertical-align:">
+                        <span class="form-label" style="float:left;">Password:</span>
+                        <span class="form-label" style="float:right;color: #15559d;font-size:16px;">Forgot Password?</span>
+                    </div>
+                    <div class="mb-2">@Html.PasswordFor(model => model.Password, new { @class = "form-input" })</div>
+                </div>
+            </div>
+            <button type="submit" id="login-button">SUBMIT</button>
+        </div>
+    </div>
+}
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

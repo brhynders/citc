@@ -1,0 +1,32 @@
+﻿@using WebMatrix.Data;
+@{ var db = Database.Open("DefaultConnection");
+    var queryuserinfo = "SELECT Id, Fname, Lname, ConnectionId FROM Users WHERE UserName='" + Context.User.Identity.Name + "'";
+    var userinfo = db.QuerySingle(queryuserinfo);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic In The Clouds - Home</title>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,400" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link href="~/Content/Home.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
+    @Html.Partial("~/Views/Shared/_NavPartialView.cshtml")
+    <div class="container body-content">
+        @RenderBody()       
+</div>
+<div id="bgf" class="bgfade"></div>
+@Html.Partial("~/Views/Account/_sideNavPartialView.cshtml")
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+<script src="~/Scripts/jquery.samask-masker.min.js"></script>
+<script src="~/Scripts/Scripts.js"></script>
+<script src="~/Scripts/underscore.js"></script>
+@RenderSection("scripts", required: false)
+</body>
+</html>

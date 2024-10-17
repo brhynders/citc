@@ -1,0 +1,212 @@
+﻿@using Microsoft.AspNet.Identity
+@using WebMatrix.Data;
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    var db = Database.Open("DefaultConnection");
+    var myid = User.Identity.GetUserId();
+    var myusername = db.QueryValue("SELECT DISTINCT (UserName) FROM Users WHERE Id='" + myid + "'");
+    var newmessagequery = "SELECT DISTINCT (FromName) FROM PrivateMessages Where ToId='" + myid + "' AND Seen='false'";
+    var getnewgroupnotification = db.Query("SELECT Accepted FROM UserGroups WHERE Id='" + myid + "' AND Accepted='false'").Count();
+    var groupstatusquery = "SELECT Groups.Creator, Groups.AlertLevel FROM UserGroups FULL JOIN Groups ON Groups.GroupId=UserGroups.GroupId WHERE UserGroups.Id='" + myid + "' AND (Groups.AlertLevel='2' OR Groups.AlertLevel='3')";
+
+}
+<div id="dashWrapper" class="p-3 noise-e9f" style="min-height:100%;width:100%;max-width:1100px;">
+    <div class="row no-gutters content-header mb-3 pt-3 pb-1 jose">DASHBOARD</div>
+    <div class="row no-gutters">
+        <div class="col-lg-8 pr-lg-3 order-2 order-lg-1">
+            @* PUBLIC POST *@
+            <div class="white-container p-1 mb-3">
+                <div class="row no-gutters">
+                    <div class="col-10">
+                        <input type="text" id="feedPostInput" class="dashNewPostText px-2 py-1" placeholder="Make a post that only your contacts will see."/>
+                    </div>
+                    <div class="col-2">
+                        <div id="dashNewPostHeader" class="d-flex flex-column justify-content-center align-items-center px-2 py-1">
+                            <div class="ion-edit" style="font-size:28px;line-height:28px;"></div>
+                            <svg class="lnr lnr-pencil" width="24px" height="24px"><use xlink:href="#lnr-pencil" style="fill:rgba(255,255,255,.5)"></use></svg>
+                            <div style="text-align:center;line-height:16px;">
+                                Create
+                                Post
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @* RECENT ACTIVITY *@
+            <div class="white-container">
+                <div class="lg-white-container-header noise-0d3 d-flex flex-row align-items-center">
+                    <svg class="lnr lnr-list mb-1" width="24px" height="24px"><use xlink:href="#lnr-list" style="fill:#fff"></use></svg>
+                    <span class="ml-2">RECENT ACTIVITY</span>
+                </div>
+                <div class="lg-white-container-body">
+                    @{
+                        var getContactsId = "SELECT DISTINCT Id FROM Contacts WHERE UserName='" + myusername + "'";
+                        int j;
+                        j = 0;
+                        foreach (var contact in db.Query(getContactsId))
+                        {
+                            var getContactsFeed = "SELECT DISTINCT UserName, Message, Timestamp FROM ContactFeeds WHERE Id='" + contact.Id + "'";
+                            foreach (var feed in db.Query(getContactsFeed))
+                            {
+                                j++;
+                                <div class="feedContainer mb-2" style="width:100%;height:auto;">
+                                    <div class="feedHeader noise-368 jose pl-2">@feed.UserName</div>
+                                    <div class="feedContent noise-e9f d-flex flex-column justify-content-center align-items-center py-2">
+                                        <div class="feedMessage px-2 py-1">@feed.Message</div>
+                                    </div>
+                                    <div class="feedFooter noise-1c6">@feed.Timestamp</div>
+                                </div>
+                            }
+                        }
+                        if (j == 0)
+                        {
+                            <div class="no-activity w-100 h-100">
+                                <svg class="lnr lnr-cross-circle mt-2" width="36px" height="36px"><use xlink:href="#lnr-cross-circle" style="fill:#bcd8f5"></use></svg>
+                                <div> "Recent Activity" will update when you add more contacts!</div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 p-0 order-1 order-lg-2">
+            @* ALERTS *@
+            <div class="white-container  mb-3">
+                <div class="sm-white-container-header noise-1c6 d-flex flex-row align-items-center">
+                    <svg class="lnr lnr-warning mb-1" width="24px" height="24px"><use xlink:href="#lnr-warning" style="fill:#fff"></use></svg>
+                    <span class="ml-2">ALERTS</span>
+                </div>
+                <div class="sm-white-container-body">
+                    @* No New *@
+                    @{
+                        var alertgroupscount = db.Query(groupstatusquery).Count();
+                        if (alertgroupscount == 0)
+                        {
+                            <div id="dashNoAlertsActivity" class="no-activity d-flex flex-row justify-content-center align-items-center p-1">
+                                <svg class="lnr lnr-checkmark-circle" width="24px" height="24px"><use xlink:href="#lnr-checkmark-circle" style="fill:#bcd8f5"></use></svg>
+                                <span class="ml-2">No new alerts</span>
+                            </div>
+                        }
+                        else
+                        {
+                            foreach (var alertGroup in db.Query(groupstatusquery))
+                            {
+                                if (alertGroup.AlertLevel == 2)
+                                {
+                                    <a href="~/Account/Groups">
+                                        <div style="width:100%;height:40px;text-transform:uppercase;line-height:18px;text-align:center;" class="alertButton alertYellow">
+                                            <div style="font-weight:600;">Group Creator: @alertGroup.Creator</div>
+                                            <div style="font-weight:300;font-size:18px;">CURRENTLY <span style="font-weight:600;">CODE YELLOW!</span></div>
+                                        </div>
+                                    </a>
+                                }
+                                else if (alertGroup.AlertLevel == 3)
+                                {
+                                    <a href="~/Account/Groups">
+                                        <div style="width:100%;height:40px;text-transform:uppercase;line-height:18px;text-align:center;" class="alertButton alertRed">
+                                            <div style="font-weight:600;">Group Creator: @alertGroup.Creator</div>
+                                            <div style="font-weight:300;font-size:18px;">CURRENTLY <span style="font-weight:600;">CODE RED!</span></div>
+                                        </div>
+                                    </a>
+                                }
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            @* GROUP ACTIVITY *@
+            <style>
+
+            </style>
+            <div class="white-container  mb-3">
+                <div class="sm-white-container-header noise-1c6 d-flex flex-row align-items-center">
+                    <svg class="lnr lnr-users mb-1" width="24px" height="24px"><use xlink:href="#lnr-users" style="fill:#fff"></use></svg>
+                    <span class="ml-2">GROUP ACTIVITY</span>
+                </div>
+                <div class="sm-white-container-body">
+                    @* No New *@
+                    @{ if (getnewgroupnotification == 0)
+                        {
+                            <div id="dashNoGroupActivity" class="no-activity d-flex flex-row justify-content-center align-items-center p-1">
+                                <svg class="lnr lnr-checkmark-circle" width="24px" height="24px"><use xlink:href="#lnr-checkmark-circle" style="fill:#bcd8f5"></use></svg>
+                                <span class="ml-2">No group activity</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div id="groupActivityBlip" class="d-flex flex-row noise-0d3">
+                                <span id="groupActivityBlipIcon" class="ion-person-stalker"></span>
+                                <div id="groupActivityBlipNumber">@getnewgroupnotification</div>
+                                <div id="groupActivityBlipText">
+                                    @{
+                                        if (getnewgroupnotification == 1)
+                                        {
+                                            <text>NEW INVITE</text>
+                                        }
+                                        else
+                                        {
+                                            <text>NEW INVITES</text>
+                                        }
+                                    }
+
+                                </div>
+                            </div>
+                        }
+
+                    }
+
+
+                </div>
+            </div>
+            @* MESSAGE ACTIVITY *@
+            <div class="white-container  mb-3">
+                <div class="sm-white-container-header noise-1c6 d-flex flex-row align-items-center">
+                    <svg class="lnr lnr-bubble mb-1" width="24px" height="24px"><use xlink:href="#lnr-bubble" style="fill:#fff"></use></svg>
+                    <span class="ml-2">MESSAGE ACTIVITY</span>
+                </div>
+                <div class="sm-white-container-body">
+                    @* No New *@
+                    @{  if (db.Query(newmessagequery).Count() == 0){
+                            <div id="dashNoMessageActivity" class="no-activity d-flex flex-row justify-content-center align-items-center p-1">
+                                <svg class="lnr lnr-checkmark-circle" width="24px" height="24px"><use xlink:href="#lnr-checkmark-circle" style="fill:#bcd8f5"></use></svg>
+                                <div class="ml-2">No new message activity</div>
+                            </div>
+                        }
+                        else
+                        {
+                            foreach (var message in db.Query(newmessagequery))
+                            {
+                                <div style="width:100%;height:50px;color:white;border-radius:3px;border:1px solid #16579c;cursor:pointer;" class="dashMessageButton megrad d-flex flex-row justify-content-center align-items-center mb-2">
+                                    @{ 
+                                        var getmessagecount = db.QueryValue("SELECT COUNT(Message) FROM PrivateMessages WHERE ToId='" + myid + "' AND FromName='" + message.FromName + "' AND Seen='false'");
+                                    }
+                                    <div style="width:20%;text-align:center;">
+                                        <div class="ion-ios-chatbubble pb-1" style="font-size:48px;"></div>
+                                    </div>
+                                    
+                                    <div style="width:80%;text-align:center" class="pr-4">
+                                        <div style="font-weight:600;font-size:18px;line-height:18px;" class="pt-1">@message.FromName</div>
+                                        <div style="text-transform:uppercase;">
+                                            @getmessagecount new 
+                                            @{  if (getmessagecount > 1)
+                                                {
+                                                    <text>messages!</text>
+                                                }
+                                                else
+                                                {
+                                                    <text>message</text>
+                                                } 
+                                            }
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

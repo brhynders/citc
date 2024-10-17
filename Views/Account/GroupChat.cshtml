@@ -1,0 +1,267 @@
+﻿@using WebMatrix.Data;
+@using Microsoft.AspNet.Identity
+@{
+    var myid = User.Identity.GetUserId();
+    ViewBag.Title = "Group Chat";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    var db = Database.Open("DefaultConnection");
+    var getMyGroups = "SELECT DISTINCT (GroupID) FROM UserGroups WHERE (NOT Id='" + myid + "' AND InviterId='" + myid + "' OR Id='" + myid + "' AND NOT InviterId='" + myid + "') AND Accepted='true' AND Cancelled='false'";
+}
+<style>
+    #chatWrapper {
+        position: fixed;
+        width: 100%;
+        max-width: 1100px;
+    }
+
+    #groupChatContainer1 {
+        height: calc(100% - 50px);
+        width: 100%;
+        background-color:#F1F7FD;
+    }
+
+    #groupChatHeader {
+        background-color: white;
+        font-size: 24px;
+        font-weight: 300;
+        height: 40px;
+        width: 100%;
+        color: #134b86;
+        border-bottom: 2px solid #bcd8f5;
+        border-radius: 0px 0px 0px 0px;
+    }
+
+    #chatInput {
+        position: absolute;
+        background-color: #fff;
+        width: 100%;
+        height: 40px;
+        top: calc(100% - 90px);
+        border-bottom: 1px solid #d2e5f9;
+        border-top: 2px solid #63a4e9;
+        border-radius: 0px 0px 0px 0px;
+    }
+
+    .groupScrollFrame {
+        position: absolute;
+        top: 85px;
+        width: 100%;
+        max-height: calc(100% - 175px) !important;
+        background-color: #F1F7FD;
+        overflow-y: scroll;
+    }
+
+    .groupchatTextInput {
+        font-size: 14px;
+        width: 100%;
+        height: 100%;
+        border: none;
+        padding-left: 10px;
+    }
+
+    #groupChatSelect {
+        position: absolute;
+        top: 40px;
+        width: 100%;
+        height: 45px;
+    }
+
+    .ion-ios-paperplane-outline {
+        line-height: 0px;
+        font-size: 30px;
+        color: #d2e5f9;
+    }
+    .memberGrad {
+        background: #1d70c9;
+        background: -moz-linear-gradient(top, #1d70c9 0%, #207cdf 17%, #1963b3 100%);
+        background: -webkit-linear-gradient(top, #1d70c9 0%,#207cdf 17%,#1963b3 100%);
+        background: linear-gradient(to bottom, #1d70c9 0%,#207cdf 17%,#1963b3 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1d70c9', endColorstr='#1963b3',GradientType=0 );
+    }
+    .chatGroupMember {
+        height: 36px;
+        width: 100%;
+        color: white;
+        border-radius: 3px;
+        border: 1px solid #134b86;
+        text-shadow: 0px 1px 3px #103e70;
+    }
+    .chatGroupMemberIcon {
+        width: 30px;
+        text-align: center;
+        font-size: 21px;
+    }
+    .chatGroupMemberName {
+        font-size: 14px;
+        font-weight: 600;
+        width: calc(100% - 30px)
+    }
+    .groupSelectContainer {
+        display: block;
+        height: 100%;
+        min-height:100%;
+        border: none;
+        min-width: 100%;
+        background-color: #fff;
+    }
+    .groupSelectInner {
+        width: 100%;
+        height: 100%;
+        background-color: #F1F7FD;
+        text-align: center;
+    }
+    .groupSelectIcon {
+        font-size: 180px;
+        color: #8fbeef;
+    }
+
+    .groupSelectText {
+        font-weight: 600;
+        font-size: 18px;
+        color: #8fbeef;
+    }
+    .m_chatOut{
+        min-width:100% !important;
+    }
+    .m_groupButtons {
+        width: 50px;
+        height: 100%;
+        text-align: center;
+        font-size: 24px;
+        line-height: 38px;
+        border: none;
+        background-color: #d2e5f9;
+        box-shadow: inset 0px 1px 0px transparent;
+        border: 1px solid transparent;
+        border-bottom: 1px solid transparent;
+        color: #a6cbf2;
+    }
+    @@media (min-width: 768px) {
+        #chatInput {
+            position: static;
+            height: 50px;
+            top: auto;
+            border-radius: 0px 0px 0px 0px;
+        }
+
+        .groupScrollFrame {
+            position: relative;
+            top: auto;
+            width: 100%;
+            min-height: 0;
+            height: 390px;
+            background-color: #F1F7FD;
+        }
+    }
+</style>
+<div id="chatWrapper" class="p-0 p-md-3 h-100 noise-e9f">
+    <div id="groupChatContainer1" class="row no-gutters d-block d-md-none">
+        <div id="groupChatHeader" class="col-md-3 d-flex flex-row">
+            <div style="width:calc(100% - 100px);height:100%;" class="pl-2">GROUP CHAT</div>
+            <div id="m_groupsAlertIcon" class="m_groupButtons"><span class="ion-alert-circled"></span></div>
+            <div id="m_groupsPeopleIcon" class="m_groupButtons" style="font-size:29px;"><span class="ion-ios-person"></span></div>
+        </div>
+        <div id="groupChatSelect" class="col-md-3 p-2 noise-368">
+            <select class="groupSelect" style="background-color:white;width:100%;height:30px;border:none;border-radius:3px;">
+                <option default>Select Group</option>
+                @{ int j;
+                    j = 1;
+                    foreach (var group in db.Query(getMyGroups))
+                    {
+                        var getThisGroupMembers = "SELECT Users.Fname, Users.Lname FROM UserGroups FULL JOIN Users ON Users.Id = UserGroups.Id WHERE GroupId = '" + group.GroupID + "' AND Accepted = 'true' AND NOT UserGroups.Id = '" + myid + "'";
+                        <option class="groupChatMemberName" value="group_@j">
+                            #@j - @foreach (var groupmember in db.Query(getThisGroupMembers))
+                            {@groupmember.Fname @groupmember.Lname <text></text>
+                        }
+                        </option>
+                        j++;
+                    }
+                }
+            </select>
+        </div>
+        <div class="groupScrollFrame col-md-3 m_groupScroll">
+            <div id="groupChatId" class="chatOutput m_chatOut d-flex flex-column justify-content-end align-items-end">
+                <!-- GROUP CHAT MESSAGES -->
+                <div class="groupSelectInner p-3 d-flex flex-column justify-content-center align-items-center">
+                    <div class="groupSelectIcon ion-ios-people-outline"></div>
+                    <div class="groupSelectText">Please select a group from the dropdown menu</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="chatInput" class="col-md-3 d-flex flex-row justify-content-center align-items-center">
+            <input class="groupchatTextInput" type="text" placeholder="Your message..." />
+            <div class="ion-ios-paperplane-outline ml-auto mr-3"></div>
+        </div>
+    </div>
+
+    <!--DESKTOP-->
+    <div id="d_groupChatCountainer2" style="width:100%; height:500px;">
+        <div class="row no-gutters d-none d-md-flex">
+            <div id="d_groupChatSelect" style="height:60px;width:100%;border-radius:5px 0px 0px 0px" class="col-3 noise-0d3 p-1">
+                <div style="color:white;font-weight:600;font-size:14px;" class="ml-1">Select Group:</div>
+                <select class="groupSelect d_groupSelect" style="background-color:white;width:100%;height:30px;border:none;border-radius:3px;">
+                    <option default>Select Group</option>
+                    @{ int k;
+                        k = 1;
+                        foreach (var group in db.Query(getMyGroups))
+                        {
+                            var getThisGroupMembers = "SELECT Users.Fname, Users.Lname FROM UserGroups FULL JOIN Users ON Users.Id = UserGroups.Id WHERE GroupId = '" + group.GroupID + "' AND Accepted = 'true' AND NOT UserGroups.Id = '" + myid + "'";
+                            <option class="groupChatMemberName" value="group_@k">
+                                #@k - @foreach (var groupmember in db.Query(getThisGroupMembers))
+                                {@groupmember.Fname @groupmember.Lname <text></text>
+                            }
+                            </option>
+                            k++;
+                        }
+                    }
+                </select>
+            </div>
+            <div id="groupChatHeader" class="jose col-9" style="height:60px;line-height:70px;padding-left:8px;font-size:32px;border-radius:0px 5px 0px 0px;">GROUP CHAT</div>
+        </div>
+        <div class="row no-gutters d-none d-md-flex">
+            <div id="chatGroupMembersContainer" style="height:390px;width:100%;" class="col-3 noise-368 px-1">
+                <!-- LIST GROUP MEMEBERS -->
+
+            </div>
+            <div class="groupScrollFrame col-md-9 d_groupScroll">
+                <div id="groupChatId" class="chatOutput d_chatOut d-flex flex-column justify-content-end align-items-end">
+                    <!-- GROUP CHAT MESSAGES -->
+                    <div class="groupSelectInner p-3 d-flex flex-column justify-content-center align-items-center">
+                        <div class="groupSelectIcon ion-ios-people-outline"></div>
+                        <div class="groupSelectText">Please select a group from the dropdown menu</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row no-gutters d-none d-md-flex">
+            <div id="chatGroupAlertContainer" style="height:50px;width:100%;border-radius:0px 0px 0px 5px;" class="noise-368 col-3 p-2">
+                <button id="groupStatusButton" class="alertButton">SELECT A GROUP</button>
+                <!-- LIST GROUP MEMEBERS -->
+            </div>
+            <div id="chatInput" style="border-radius:0px 0px 5px 0px;" class="col-9 d-flex flex-row justify-content-center align-items-center">
+                <input class="groupchatTextInput" type="text" placeholder="Your message..." />
+                <div class="ion-ios-paperplane-outline ml-auto mr-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@{ int l;
+    l = 1;
+    foreach (var group in db.Query(getMyGroups))
+    {
+        var getThisGroupMembers = "SELECT Users.Fname, Users.Lname, Users.ConnectionId , Users.Id FROM UserGroups FULL JOIN Users ON Users.Id = UserGroups.Id WHERE GroupId = '" + group.GroupID + "' AND Accepted = 'true' AND NOT UserGroups.Id = '" + myid + "'";
+        var getThisGroupLevel = db.QueryValue("SELECT AlertLevel FROM Groups WHERE GroupId='" + group.GroupID + "'");
+        <div id="group_@l">
+            <input id="ID_group_@l" value="@group.GroupID" hidden />
+            @foreach (var groupmember in db.Query(getThisGroupMembers))
+            {
+                <input class="groupMemberName" value="@groupmember.Fname @groupmember.Lname" hidden>
+                <input id="groupMemberConnId_@groupmember.Id" class="memberConnectionId" value="@groupmember.ConnectionId" hidden>
+                
+            }
+            <input id="groupStatus" value="@getThisGroupLevel"/>
+        </div>
+        l++;
+    }
+}

@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNet.Identity
+@using WebMatrix.Data;
+@{  var db = Database.Open("DefaultConnection");
+    var myid = User.Identity.GetUserId();
+    var newmessagequery = db.Query("SELECT Seen FROM PrivateMessages Where ToId='" + myid + "' AND Seen='false'").Count();
+    var getnewgroupnotification = db.Query("SELECT Accepted FROM UserGroups WHERE Id='" + myid + "' AND Accepted='false'").Count();
+}
+@if (Request.IsAuthenticated)
+        {using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "h-100" }))
+    {@Html.AntiForgeryToken()
+        <div id="navDashWrapper" class="d-none d-xl-flex flex-row justify-content-center align-items-center h-100">
+            <div style="width:1px;height:60%;background-color:#d2e5f9"></div>
+            <div id="navDashAlerts" onclick="navGroups()" style="width:70px;height:100%;text-align:center;cursor:pointer;">
+                <div id="navDashAletsIcon" class="h-100 w-100 d-flex justify-content-center align-items-center"><svg class="lnr lnr-alarm" width="30px" height="30px"><use xlink:href="#lnr-alarm" style="fill:#16579c"></use></svg></div>
+                <div id="navDashAlertsBadge" class="@if (getnewgroupnotification == 0){<text>d-none</text>} navBadge">
+                    @getnewgroupnotification
+                </div>
+            </div>
+            <div style="width:1px;height:60%;background-color:#d2e5f9"></div>
+            <div id="navDashMessages" onclick="navMessages()" style="width:70px;height:100%;text-align:center;cursor:pointer;">
+                <div id="navDashMessagesIcon" class="h-100 w-100 d-flex justify-content-center align-items-center"><svg class="lnr lnr-bubble" width="30px" height="30px"><use xlink:href="#lnr-bubble" style="fill:#16579c"></use></svg></div>
+                <div id="navDashMessagesBadge" class="@if (newmessagequery == 0){<text>d-none</text>} navBadge">
+                    @newmessagequery
+                </div>
+            </div>
+            <div style="width:1px;height:60%;background-color:#d2e5f9"></div>
+            <div id="navDashUserWrapper" class="px-4" style="cursor:pointer;">
+                <div id="navDashIcon"></div>
+                <a href="~/Account/Dashboard"><div id="navDashUser" style="color:#103e70;text-transform:uppercase;font-weight:600;font-size:14px;"></div></a>
+            </div>
+            <div style="width:1px;height:60%;background-color:#d2e5f9"></div>
+            <div id="navDashLogOut" class="h-100">
+                <button id="dashLogOut" type="submit" class="navDashButton h-100">LOG OUT</button>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div id="navDashWrapper" class="d-none d-xl-block">
+        <a href="~/Account/Register"><button class="navDashButton h-100">REGISTER</button></a>
+        <a href="~/Account/LogIn"><button class="navDashButton h-100 nav-login">LOG IN</button></a>
+    </div>
+}

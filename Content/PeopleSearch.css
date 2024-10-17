@@ -1,0 +1,179 @@
+﻿#peopleWrapper {
+    min-height: 100%;
+    width: 100%;
+    max-width: 1100px;
+}
+
+#peopleSearchContainer {
+    width: 100%;
+    min-height: 70px;
+    border-radius: 5px 5px 0px 0px;
+    border: 1px solid #134b86;
+    border-bottom: 3px solid #63a4e9;
+}
+
+    #peopleSearchContainer input,
+    #peopleSearchContainer select {
+        width:100% !important;
+        height: 36px;
+        border: 1px solid #134b86;
+        padding-left: 8px;
+        background-color: white;
+        border-radius: 3px;
+    }
+
+    #peopleSearchContainer label {
+        padding-left: 2px;
+        margin-bottom: 0px;
+        font-weight: 600;
+        color: white;
+        text-shadow: 0px 1px 2px #134b86;
+    }
+
+.personResultsRow {
+    color: #103e70;
+    font-size: 14px;
+    font-weight: 600;
+    min-height: auto !important;
+    border-bottom: 1px solid #d2e5f9;
+}
+.createGroup, .resultsButton {
+    text-align: center;
+}
+
+.personInfo {
+    text-align: center;
+}
+.w20 {
+    width: 20%;
+}
+
+.w15 {
+    width: 15%;
+}
+
+.w10 {
+    width: 10%;
+}
+
+.w7 {
+    width: 7%;
+}
+
+.resultsButton {
+    cursor: pointer;
+    background-color: #207cdf;
+    height: 42px;
+    border-radius: 5px;
+    border: 1px solid #1d70c9;
+    box-shadow: inset 0px 1px 1px #8fbeef;
+    transition: .1s ease-in;
+}
+
+    .resultsButton:hover {
+        background-color: #3689e2;
+        box-shadow: inset 0px 1px 1px #a6cbf2;
+    }
+
+.resultsButtonText {
+    line-height: 20px;
+    font-size: 24px;
+    color: white;
+    text-shadow: 0px 1px 2px #16579c;
+}
+
+.resultsButtonLabel {
+    line-height: 10px;
+    font-size: 11px;
+    color: white;
+    text-shadow: 0px 1px 2px #16579c;
+}
+
+.searchContainer {
+    height: 536px;
+    min-width: 100%;
+    background-color: #fff;
+    border: 1px solid #134b86;
+    border-top: none;
+    border-radius: 0px 0px 5px 5px;
+}
+
+#searchInner {
+    width: 100%;
+    height: 100%;
+    background-color: #e9f2fc;
+    border-radius: 5px;
+    box-shadow: inset 0px 0px 5px #bcd8f5;
+    text-align: center;
+}
+
+.searchIcon {
+    font-weight: 600;
+    font-size: 240px;
+    color: #63a4e9;
+}
+
+.searchText {
+    font-weight: 600;
+    font-size: 18px;
+    color: #63a4e9;
+}
+
+#searchInviteButton {
+    cursor: pointer;
+    height: 50px;
+    width: 180px;
+    background-color: #63a4e9;
+    border-radius: 5px;
+    text-align: center;
+    line-height: 49px;
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    text-shadow: 0px 1px 2px #3689e2;
+    border: 1px solid #4d96e6;
+    box-shadow: inset 0px 1px 1px #bcd8f5;
+}
+
+    #searchInviteButton:hover {
+        background-color: #79b1ec;
+        box-shadow: inset 0px 1px 1px #d2e5f9;
+    }
+
+.searchingSpinner {
+    border: 16px solid #fff;
+    border-radius: 50%;
+    border-top: 16px solid #63a4e9;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+.searchScroll {
+    width: 100%;
+    height: 500px;
+    background-color: #F7FAFE;
+    border-radius: 0px 0px 5px 5px;
+    border: 1px solid #134b86;
+    border-top: none;
+    overflow-y: auto;
+}
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

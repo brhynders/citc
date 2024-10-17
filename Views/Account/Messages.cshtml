@@ -1,0 +1,53 @@
+﻿@using WebMatrix.Data;
+@using Microsoft.AspNet.Identity
+@{
+    ViewBag.Title = "Messages";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    var myid = User.Identity.GetUserId();
+    var db = Database.Open("DefaultConnection");
+    var getMyFromMessages = "SELECT DISTINCT (FromId) FROM PrivateMessages WHERE ToId='"+myid+"'";
+}
+<div id="messagesWrapper" class="p-3 noise-e9f" style="min-height:100%;width:100%;max-width:600px;">
+    <div class="row no-gutters content-header mb-3 pt-0 pb-1 jose">MESSAGES</div>
+    <div class="messagesContainer mb-2">
+        @{
+            foreach (var fromMessage in db.Query(getMyFromMessages))
+            {
+                var getFromName = "SELECT Fname, Lname , ConnectionId FROM Users WHERE Id='" + fromMessage.FromId + "'";
+                var fromName = db.QuerySingle(getFromName);
+        <div id="@fromMessage.FromId" class="messageContent messageGrad d-flex flex-column justify-content-between mb-2">
+            
+            <div class="messageDiv mb-auto"></div>
+            <div class="messageInfoWrapper py-1" style="">
+                <div class="messageInfoContainer">
+                    <div class="messageName">
+                        <div id="thisName">@fromName.Fname @fromName.Lname</div>
+                        <input type="text" id="connid_@fromMessage.FromId" value="@fromName.ConnectionId" hidden />
+                    </div>
+                    <div class="messageDetails p-1 d-flex flex-row">
+                        <div class="messageIconCont"><span class="messageIcon ion-ios-chatbubble"></span></div>
+                        <div class="messageContextCont d-flex flex-column justify-content-center align-items-center">
+                            @{
+                                var getLastMessage = "SELECT TOP 1 Message, Timestamp FROM PrivateMessages WHERE (ToId='" + myid + "' AND FromId='" + fromMessage.FromId + "') OR (ToId='" + fromMessage.FromId + "' AND FromId='" + myid + "') ORDER BY MessageId DESC";
+                                foreach (var message in db.Query(getLastMessage))
+                                {
+                                    <div class="messageMessage">@message.Message</div>
+                                    <div class="messageTimeStamp">@message.Timestamp</div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="messageDiv mt-auto"></div>
+        </div>
+
+                                }
+        }
+    </div>
+</div>
+
+
+
+
+

@@ -1,0 +1,11 @@
+﻿@using Microsoft.AspNet.Identity
+@{
+    if (Request.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}

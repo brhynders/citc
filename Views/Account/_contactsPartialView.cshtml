@@ -1,0 +1,40 @@
+﻿@using WebMatrix.Data;
+@using Microsoft.AspNet.Identity;
+@{var db = Database.Open("DefaultConnection");
+    var getcontacts = "SELECT Users.Fname , Users.Lname , Users.Id , Users.UserName, Users.ConnectionId, Users.Connected FROM Users FULL JOIN Contacts ON Contacts.Id=Users.Id WHERE Contacts.UserName='" + User.Identity.Name + "' ORDER BY Users.Lname";
+    var myid = User.Identity.GetUserId();}
+<div id="contactsWrapper" class="d-none d-lg-block gradient-light">
+    <div id="contactsHeader" class="d-flex flex-row justify-content-center align-items-center">
+        <div class="ion-ios-people mr-2" style="font-size:28px;line-height:38px;color:#8fbeef;"></div>
+        <div id="contactsLabel" class="ml-1 mr-4">CONTACTS</div>
+    </div>
+    <div id="contactsListWrapper">
+        @* CONTACT *@
+        @{foreach (var contact in db.Query(getcontacts)){
+                <div id="@contact.Id" class="contactsButton d-flex flex-row align-items-center">
+                    <input id="thisUserName" type="text" value="@contact.UserName" hidden />
+                    <input id="d_ConnId_@contact.Id" type="text" value="@contact.ConnectionId" hidden />
+                    <span class="ion-record ml-2" style="font-size:14px; @{if (contact.Connected == true){ <text>color: limegreen</text> }else{ <text> color: #bcd8f5;</text> } } "></span>
+                    <div id="thisName" class="ml-3" style="padding-bottom:1px; @{if (contact.Connected == true){ <text>color: #1963b3</text> }else{ <text> color: #8fbeef;</text> } } ">@contact.Fname @contact.Lname</div>
+                    @{var getmessagehistory = "SELECT TOP 20 Message, FromName, ToName, ToId, FromId FROM PrivateMessages WHERE (ToId='" + contact.Id + "' AND FromId='" + myid + "') OR (ToId='" + myid + "' AND FromId='" + contact.Id + "') ORDER BY Timestamp Desc";}
+                    <div id="@contact.Id-history" class="d-none">
+                        @{
+                            var i = 11;
+                            foreach (var message in db.Query(getmessagehistory))
+                            {
+                                i -= 1;
+                            <div id="@contact.Id-@i">@if (message.FromId == myid){
+                                <div class="messageNumber_@i d-flex flex-column px-2 py-1 align-self-end megrad mecont">
+                                    <label class="mb-0"> Me: </label>
+                                    <span> @message.Message </span>
+                                </div>}
+                                else{
+                                <div class="messageNumber_@i d-flex flex-column px-2 py-1 align-self-start themgrad themcont">
+                                    <label class="mb-0"> @contact.Fname @contact.Lname </label>
+                                    <span>@message.Message</span>
+                                </div>}
+                            </div>}}
+                    </div>
+                </div>}}
+    </div>
+</div>

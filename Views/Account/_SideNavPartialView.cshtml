@@ -1,0 +1,45 @@
+﻿@using Microsoft.AspNet.Identity
+@using WebMatrix.Data;
+<div id="sideNavWrapper" class="sideNavBefore noise-1c6 
+     @{if (ViewBag.Title == "Dashboard" || ViewBag.Title == "Messages" || ViewBag.Title == "Groups" || ViewBag.Title == "Group Chat" || ViewBag.Title == "People Search"){<text>d-block </text>}
+       else{<text>d-lg-none</text>}
+     }
+     ">
+    @* USER LOGGED IN *@
+    @if (Request.IsAuthenticated){
+        var myid = User.Identity.GetUserId();
+        var db = Database.Open("DefaultConnection");
+        var getGroupNotification = "SELECT COUNT (Accepted) FROM UserGroups WHERE Id='" + myid + "' AND Accepted='false'";
+        var NewMessages = db.Query("SELECT Seen FROM PrivateMessages Where ToId='" + myid + "' AND Seen='false'").Count();
+        var GroupNotifications = db.QueryValue(getGroupNotification);
+        <div id="sideNavProfileWrapper" class="d-flex flex-row justify-content-center align-items-center noise-0d3">
+            <div id="sideNavProfileContainerHeader" class="noise-1c6">
+                <div class="ion-ios-cloud-outline pl-1"></div>
+            </div>
+            <div id="sideNavProfileContainerBody" class="noise-368">
+                <div id="sideNavName"></div>
+            </div>
+        </div>
+        <div id="sideNavMenuWrapper">
+            @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { @class = "h-100" }))
+            {
+                @Html.AntiForgeryToken()
+                <a href="~/Account/Dashboard" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-settings sideNavButtonIcons mr-3"></span>DASHBOARD</a>
+                <a href="~/Account/Messages" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-chatbubble-outline sideNavButtonIcons mr-3"></span>MESSAGES<div class="sideNavButtonBadge" style="@if (NewMessages > 0) {<text>color:white;</text>}">@NewMessages</div></a>
+                <a href="~/Account/Groups" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-people-outline sideNavButtonIcons mr-3"></span>GROUPS<div class="sideNavButtonBadge" style="@if (GroupNotifications > 0) {<text>color:white;</text>}">@GroupNotifications</div></a>
+                <a href="~/Account/GroupChat" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-chatboxes-outline sideNavButtonIcons mr-3"></span>GROUP CHAT</a>
+                <a href="~/Account/PeopleSearch" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-search sideNavButtonIcons mr-3"></span>PEOPLE SEARCH</a>
+                <a href="~/Account/Dashboard" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-gear-outline sideNavButtonIcons mr-3"></span>PROFILE</a>
+                <button type="submit" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-cloud-download-outline sideNavButtonIcons mr-3"></span>LOG OUT</button>
+            }
+        </div>
+    }
+    @* USER NOT LOGGED IN *@
+    else{
+    <div id="sideNavMenuWrapper">
+            @Html.AntiForgeryToken()
+            <a href="~/Account/LogIn" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-download-outline sideNavButtonIcons mr-3"></span>LOG IN</a>
+            <a href="~/Account/Register" class="sideNavButton d-flex flex-row align-items-center button-padding"><span class="ion-ios-compose-outline sideNavButtonIcons mr-3"></span>REGISTER</a>
+    </div>
+    }
+</div>

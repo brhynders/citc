@@ -1,0 +1,66 @@
+﻿@using ClinicInTheClouds.Hubs
+@using WebMatrix.Data;
+@using Microsoft.AspNet.Identity
+@{
+    var myid = User.Identity.GetUserId();
+    var db = Database.Open("DefaultConnection");
+    var queryuserinfo = "SELECT Id, Fname, Lname, ConnectionId FROM Users WHERE UserName='" + Context.User.Identity.Name + "'";
+    var userinfo = db.QuerySingle(queryuserinfo);
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic In The Clouds - @ViewBag.Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,400" rel="stylesheet">
+    @{if (ViewBag.Title == "Home")
+        {
+    <link href="~/Content/Home.css" rel="stylesheet" />
+        }
+        else if (ViewBag.Title == "Dashboard")
+        {
+    <link href="~/Content/Dashboard.css" rel="stylesheet" />
+        }
+        else if (ViewBag.Title == "Groups")
+        {
+    <link href="~/Content/Groups.css" rel="stylesheet" />
+        }
+        else if (ViewBag.Title == "People Search")
+        {
+    <link href="~/Content/PeopleSearch.css" rel="stylesheet" />
+        }
+        else if (ViewBag.Title == "Group Chat")
+        {
+    <link href="~/Content/GroupChat.css" rel="stylesheet" />
+        }
+        else if (ViewBag.Title == "Messages")
+        {
+    <link href="~/Content/Messages.css" rel="stylesheet" />
+        }}    @Styles.Render("~/Content/css")    @Scripts.Render("~/bundles/modernizr")</head>
+<body>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    <script src="~/Scripts/jquery.signalR-2.2.3.js"></script>
+    <script src="~/Scripts/jquery.samask-masker.min.js"></script>
+    <script src="~/Scripts/underscore.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script src="~/Scripts/Scripts.js"></script>
+    <script src="~/Scripts/PeopleSearch.js"></script>
+    <script src="https://cdn.linearicons.com/free/1.0.0/svgembedder.min.js"></script>
+    @Html.Partial("~/Views/Shared/_NavPartialView.cshtml")
+    <div class="accountContainer">@RenderBody()</div>
+    <div id="bgf" class="bgfade"></div>
+    @Html.Partial("~/Views/Account/_sideNavPartialView.cshtml")
+    @Html.Partial("~/Views/Account/_contactsPartialView.cshtml")
+    @Html.Partial("~/Views/Account/_MobilePrivateMessage.cshtml")
+    @Html.Partial("~/Views/Account/_GroupAlertLevel.cshtml")
+    @Html.Partial("~/Views/Messaging/_chatWindow.cshtml")
+    <input id="UserId" type="text" value="@userinfo.Id" hidden />
+    <input id="Username" type="text" value="@userinfo.Fname @userinfo.Lname" hidden />
+    <input id="UserConnectionId" type="text" value="@userinfo.ConnectionId" hidden />
+    <script src="~/Scripts/MessangerScript.js"></script>
+    <script src="~/Scripts/AlertLevels.js"></script>
+    <script src="~/Scripts/FeedPost.js"></script>@RenderSection("scripts", required: false)
+</body>
+</html>

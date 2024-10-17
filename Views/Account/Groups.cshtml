@@ -1,0 +1,186 @@
+﻿@using WebMatrix.Data;
+@using Microsoft.AspNet.Identity;
+@{
+    ViewBag.Title = "Groups";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    var userid = User.Identity.GetUserId();
+    var db = Database.Open("DefaultConnection");
+    var getPendingCount = "SELECT COUNT (InviterId) FROM UserGroups WHERE InviterId='" + userid + "' AND Accepted='false'";
+    var getNewCount = "SELECT COUNT (InviterId) FROM UserGroups WHERE Id='" + userid + "' AND Accepted='false'";
+}
+<style>
+    .groupsRequstBlip {
+        width: 100%;
+        height: 70px;
+    }
+
+    .groupsRequestBlipHeader {
+        width: 100%;
+        height: 24px;
+        background-color: #4d96e6;
+        line-height: 22px;
+        border-radius: 5px 5px 0px 0px;
+        text-shadow: 0px 1px 2px #1d70c9;
+    }
+
+    .groupsRequestBlipContent {
+        width: 100%;
+        height: 46px;
+        background-color: #16579c;
+        line-height: 40px;
+        border-radius: 0px 0px 5px 5px;
+        box-shadow: inset 0px 2px 5px #134b86;
+    }
+
+        .groupsRequestBlipContent form {
+            width: 100%;
+            height: 100%;
+        }
+
+    .groupRequestBlipText {
+        font-weight: 600;
+        color: #fff;
+        font-size: 16px;
+        text-transform: uppercase;
+    }
+
+    .groupsRequestButton {
+        cursor: pointer;
+        height: 30px;
+        width: 90%;
+        background-color: #0d3259;
+        border: 1px solid #0a2543;
+        border-radius: 3px;
+        font-size: 14px;
+        line-height: 28px;
+        text-align: center;
+        font-weight: 600;
+        color: #fff;
+    }
+
+        .groupsRequestButton:hover {
+            background-color: #103e70;
+            border: 1px solid #0d3259;
+        }
+
+    .activeLogo{
+        font-size:48px;
+        color:white;
+        text-align:center;
+        width:60px;
+    }
+</style>
+<div id="groupWrapper" class="p-3 noise-e9f">
+    <div class="row no-gutters content-header mb-3 pb-1 jose">GROUPS</div>
+    <div class="row no-gutters">
+        <div class="col-lg-8 pr-lg-3 order-2 order-lg-1">
+            <div class="white-container px-3 py-1">
+                <div id="groupsActiveGroupsLabel">ACTIVE GROUPS</div>
+                @{ var countgroups = "SELECT COUNT (Id) FROM UserGroups WHERE Accepted='true' AND NOT Id='" + userid + "'";
+                    if (db.QueryValue(countgroups) == 0)
+                    {
+                        <div id="dashNoGroupActivity" class="no-activity my-2">
+                            <div>Not in a group yet!</div>
+                        </div>
+                    }
+                    else
+                    {
+                        var checkActiveGroups = "SELECT DISTINCT (GroupId) FROM UserGroups WHERE Id='" + userid + "' AND Accepted='true'";
+                        foreach (var activegroup in db.Query(checkActiveGroups))
+                        {
+                            var checkActiveMemebers = "SELECT COUNT (Id) FROM UserGroups WHERE GroupId='" + activegroup.GroupId + "' AND Accepted='true' AND NOT Id='" + userid + "'";
+                            if (db.QueryValue(checkActiveMemebers) >= 1)
+                            {
+                                <div class="groupsContainer groups-grad my-2 d-flex flex-row justify-content-center align-items-center p-1">
+                                    <div class="activeLogo"><span class="ion-ios-people"></span></div>
+                                    <div class="groupsMembers px-1">
+                                        <div class="groupsMembersLabel">Group Members:</div>
+                                        @{ var currentGroupId = activegroup.GroupId;
+                                            var getActiveGroupMembers = "SELECT Users.Fname, Users.Lname FROM UserGroups FULL JOIN Users ON Users.Id=UserGroups.Id WHERE GroupId='" + currentGroupId + "' AND Accepted='true' AND NOT UserGroups.Id='" + userid + "'";
+                                            <p>
+                                                @foreach (var groupmember in db.Query(getActiveGroupMembers))
+                                                {
+                                                    @groupmember.Fname <text></text> @groupmember.Lname <text></text>
+                                                }
+
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-lg-4 p-0 order-1 order-lg-2">
+            @* GROUP REQUESTS *@
+            <div class="white-container  mb-3">
+                <div class="sm-white-container-header noise-1c6">
+                    <span class="ion-alert"></span>
+                    <span>GROUP INVITATIONS</span>
+                </div>
+                <div class="sm-white-container-body">
+                    @{ if (db.QueryValue(getNewCount) == 0)
+                        {
+                            <div id="dashNoAlertsActivity" class="no-activity">
+                                <div>No new invitiations</div>
+                            </div>
+                        }
+                        else
+                        {
+                            var getNewRequests = "SELECT InviterName, GroupId, InviterId FROM UserGroups WHERE Id='" + userid + "' AND Accepted='false'";
+                            foreach (var newgrouprequest in db.Query(getNewRequests))
+                            {
+                                <div class="groupsRequstBlip d-flex flex-column justify-content-between align-items-center">
+                                    <div class="groupsRequestBlipHeader d-flex flex-row justify-content-center align-content-center">
+                                        <div class="groupRequestBlipText"><span style="font-size:11px;">INVITE FROM</span> @newgrouprequest.InviterName</div>
+                                    </div>
+                                    <div class="groupsRequestBlipContent d-flex flex-row align-items-center justify-content-around w-100 mb-1">
+                                        <form action="~/Account/Groups/?groupid=@newgrouprequest.GroupId&inviterid=@newgrouprequest.InviterId&acceptdecline=false" method="post" class="d-flex flex-row justify-content-center align-items-center">
+                                            <button type="submit" class="groupsRequestButton">DECLINE</button>
+                                        </form>
+                                        <form action="~/Account/Groups/?groupid=@newgrouprequest.GroupId&inviterid=@newgrouprequest.InviterId&acceptdecline=true" method="post" class="d-flex flex-row justify-content-center align-items-center">
+                                            <button type="submit" class="groupsRequestButton">ACCEPT</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+            @* PENDING GROUPS *@
+            <div class="white-container  mb-3">
+                <div class="sm-white-container-header noise-1c6">
+                    <span class="ion-person-add"></span>
+                    <span>PENDING INVITES</span>
+                </div>
+                <div class="sm-white-container-body">
+                    @{ if (db.QueryValue(getPendingCount) == 0)
+                        {
+                            <div id="dashNoGroupActivity" class="no-activity">
+                                <div>No pending invites</div>
+                            </div>
+                        }
+                        else
+                        {
+                            var getPendingRequests = "SELECT Users.Fname, Users.Lname FROM UserGroups FULL JOIN Users ON Users.Id=UserGroups.Id WHERE UserGroups.InviterId='" + userid + "' AND UserGroups.Accepted='false'";
+                            foreach (var pendinginvite in db.Query(getPendingRequests))
+                            {
+                                <div style="width:100%;height:40px;background-color:white;border:1px solid #d2e5f9;text-align:center;line-height:38px;border-radius:3px;" class="d-flex flex-row mb-1">
+                                    <div class="ion-ios-clock-outline ml-2" style="font-size:26px; color:#bcd8f5"></div>
+                                    <div style="font-size: 18px; font-weight:600;color:#8fbeef" class="ml-2">@pendinginvite.Fname @pendinginvite.Lname</div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

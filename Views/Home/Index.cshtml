@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+<div id="homeWrapper">
+    <div id="homeBannerImage" class="container-fluid d-block">
+        <div class="row h-100">
+            <div id="homeBannerImageWrapper" class="col-lg-4 ml-md-5 px-3">
+                <img id="homeBannerLogo" class="img-fluid d-block mx-auto mb-2" src="~/Content/Images/logo_white.png" />
+                <div class="jose mb-2" style="font-size:24px;color:white;text-align:center">CLINIC IN THE CLOUDS</div>
+                <div class="white-div d-block mx-auto"></div>
+                <div class="strong-white mt-2">A place where patients, physicians, caregivers and family members can come together to provide real-time support.</div>
+            </div>
+        </div>
+    </div>
+    <div class="noise-e9f" style="position:relative;height:auto;width:100%;box-shadow: 0px 1px 3px rgba(6, 25, 45,.2);">
+        <div class="row no-gutters">
+            @* Patients *@
+            <div class="col-lg-4 px-5 pb-4 pt-1" style="color:#1c6dca">
+                <img class="d-block mx-auto" src="~/Content/Images/Home/home_lifeline.png" />
+                <div class="text-center" style="font-size:21px;font-weight:600;">PATIENTS</div>
+                <div class="blue-div d-block mx-auto"></div>
+                <div class="text-center mt-2" style="font-size:14px;">
+                    As a patient, you can find help with a click of a button! Depending on urgency, raise your groups alert level to instantly notify doctors and caretakers in your group that you are in need.
+                </div>
+            </div>
+            @* Physicians *@
+            <div class="col-lg-4 px-5 pb-4 pt-1" style="color:#1c6dca">
+                <img class="d-block mx-auto" src="~/Content/Images/Home/home_doctor.png" />
+                <div class="text-center" style="font-size:21px;font-weight:600;">PHYSICIANS</div>
+                <div class="blue-div d-block mx-auto"></div>
+                <div class="text-center mt-2" style="font-size:14px;">
+                    Physician's that partake in the Clinic In The Clouds software use it's real-time functionality to efficently get information about their patients. From a simple checkup, to issuing an alert for all group members to get in contact with their patient.
+                </div>
+            </div>
+            @* Family *@
+            <div class="col-lg-4 px-5 pb-4 pt-1" style="color:#1c6dca">
+                <img class="d-block mx-auto" src="~/Content/Images/Home/home_family.png" />
+                <div class="text-center" style="font-size:21px;font-weight:600;">FAMILY</div>
+                <div class="blue-div d-block mx-auto"></div>
+                <div class="text-center mt-2" style="font-size:14px;">
+                    Clinic In The Clouds is a discreet way of keeping in touch with your loved ones their physicians or caretakers. Open communication with your loved one, as a group, has proven to be very powerful tool for rehabilition.
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="homeFeaturesFade" class="d-block">
+        <div class="pl-2 pl-md-4" id="homeFeaturesLabel"><span class="jose" style="color:#1861b4;">CLINIC IN THE CLOUDS</span><i>&nbsp;&nbsp;features:</i></div>
+    </div>
+    <div class="row no-gutters noise-1c6" style="color:#e9f2fc;font-weight:600;font-size:14px;">
+        <div class="homeFeaturesBorder col-lg-2 text-center py-2 px-4 d-flex flex-column justify-content-center align-items-center">
+            <svg class="lnr lnr-question-circle" width="46px" height="46px"><use xlink:href="#lnr-question-circle" style="fill:#fff"></use></svg>
+            <div>Request help, or begin helping instantly!</div>
+        </div>
+        <div class="homeFeaturesBorder col-lg-2 text-center py-2 px-4 d-flex flex-column justify-content-center align-items-center">
+            <svg class="lnr lnr-magnifier" width="46px" height="46px"><use xlink:href="#lnr-magnifier" style="fill:#fff"></use></svg>
+            <div>Find patients, physicians, and caretakers with ease.</div>
+        </div>
+        <div class="homeFeaturesBorder col-lg-2 text-center py-2 px-4 d-flex flex-column justify-content-center align-items-center">
+            <svg class="lnr lnr-bubble" width="46px" height="46px"><use xlink:href="#lnr-bubble" style="fill:#fff"></use></svg>
+            <div>Internal Messaging System</div>
+        </div>
+        <div class="homeFeaturesBorder col-lg-2 text-center py-2 px-4 d-flex flex-column justify-content-center align-items-center">
+            <svg class="lnr lnr-usersr" width="46px" height="46px"><use xlink:href="#lnr-users" style="fill:#fff"></use></svg>
+            <div>Expansive Group Chat</div>
+        </div>
+        <div class="homeFeaturesBorder col-lg-2 text-center py-2 px-4">
+            <svg class="lnr lnr-alarm" width="46px" height="46px"><use xlink:href="#lnr-alarm" style="fill:#fff"></use></svg>
+            <div>Real-Time Notifications and Alerts.</div>
+        </div>
+        <div class="col-lg-2 text-center py-2 px-4">
+            <svg class="lnr lnr-warning" width="46px" height="46px"><use xlink:href="#lnr-warning" style="fill:#fff"></use></svg>
+            <div>Crisis Alerts texting and emailing group members.</div>
+        </div>
+    </div>
+</div>

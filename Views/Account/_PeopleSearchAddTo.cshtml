@@ -1,0 +1,120 @@
+﻿@using WebMatrix.Data;
+@using Microsoft.AspNet.Identity
+@{
+    var myid = User.Identity.GetUserId();
+    var db = Database.Open("DefaultConnection");
+    var getMyGroups = "SELECT GroupID FROM UserGroups WHERE (NOT Id='" + myid + "' AND InviterId='" + myid + "' OR Id='" + myid + "' AND NOT InviterId='" + myid + "') AND Accepted='true' AND Cancelled='false'";
+}
+<style>
+    .addGroupWrapper {
+        position: absolute;
+        width: 100%;
+        max-width: 1100px;
+        height: 100%;
+        left: 0px;
+        top: 0px;
+        transition: .12s ease-in;
+    }
+
+    .agwrapper {
+        z-index: -2;
+        opacity: 0;
+    }
+
+    .agwrappertoggle {
+        z-index: 3;
+        opacity: 1;
+    }
+
+    .addGroupContainer {
+        width: 330px;
+        height: auto;
+        background-color: white;
+        border-radius: 8px;
+        border: 1px solid #d2e5f9
+    }
+
+    .addGroupHeader {
+        width: 100%;
+        height: 50px;
+        border-radius: 5px 5px 0px 0px;
+        font-size: 18px;
+        color: white;
+        font-weight: 600;
+        line-height: 55px;
+    }
+
+    .addGroupContent {
+        width: 100%;
+        height: auto;
+        box-shadow: inset 0px 0px 5px #d2e5f9;
+        border-left: 1px solid #bcd8f5;
+        border-right: 1px solid #bcd8f5;
+        color: #06192d;
+    }
+    .addGroupList{
+        font-size:18px;
+    }
+    .addGroupNumberContainer {
+        background-color: #1d70c9;
+        width: 20%;
+        font-size: 26px;
+        color: white;
+        font-weight: 600;
+        text-align: center;
+        border-radius: 3px 0px 0px 3px;
+        line-height: 44px;
+        text-shadow: 0px 1px 3px #134b86;
+        border: 1px solid #1963b3;
+    }
+    .addGroupMembersContainer {
+        background-color: #d2e5f9;
+        width: 80%;
+        font-size: 16px;
+        line-height: 46px;
+        padding-left: 10px;
+        border-radius: 0px 3px 3px 0px;
+        border: 1px solid #a6cbf2;
+        border-left:none;
+    }
+    .groupList{
+        cursor:pointer;
+    }
+</style>
+<div id="agModal" class="addGroupWrapper agwrapper d-flex flex-column justify-content-start align-items-center justify-content-lg-center">
+    <input id="addThisPerson" type="text" hidden value="#"/>
+    <div class="addGroupContainer d-flex flex-column justify-content-center align-items-center p-1">
+        <div class="addGroupHeader noise-0d3 pl-4">
+            <div>Please select a group:</div>
+        </div>
+        <div class="addGroupContent">
+            <div id="addGroupScroll" class="addGroupList d-flex flex-column p-2">
+                @{ int j;
+                    j = 1;
+                    foreach (var group in db.Query(getMyGroups))
+                    {
+                        var getThisGroupMembers = "SELECT Users.Fname, Users.Lname FROM UserGroups FULL JOIN Users ON Users.Id = UserGroups.Id WHERE GroupId = '" + group.GroupID + "' AND Accepted = 'true' AND NOT UserGroups.Id = '" + myid + "'";
+                        <div style="width:100%;height:50px;" class="groupList d-flex flex-row mt-1">
+                            <input class="thisGroupId" type="text" hidden value="@group.GroupID" />
+                            <div class="addGroupNumberContainer">@j</div>
+                            <div class="addGroupMembersContainer">
+                                @foreach (var groupmember in db.Query(getThisGroupMembers))
+                                {
+                                    <span>@groupmember.Fname @groupmember.Lname</span>
+                                }
+                            </div>
+                        </div>
+                        j++;
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $('.groupList').click(function() {
+        var inviteeinfo = $('#addThisPerson').val();
+        var groupinfo = $(this).children('.thisGroupId').attr('value');
+        window.location.href = "AddGroup/?inviteeid="+inviteeinfo+"&groupid="+groupinfo;
+    });
+</script>

@@ -1,0 +1,29 @@
+﻿<div id="alertModal" class="alertGroupWrapper alertwrapper d-flex flex-column justify-content-start align-items-center justify-content-md-center">
+    <div id="alertModalContainer">
+        <div id="alertModalHeader" class="noise-0d3 jose pl-3 d-flex flex-row">
+            <div style="width:calc(100% - 50px);height:100%;">ALERT STATUS</div>
+            <div style="width:50px;height:100%;color:white;text-align:center;cursor:pointer;" class="ion-close ml-auto alertClose"></div>
+        </div>
+        <div id="alertModalCurrent" class="d-flex flex-column justify-content-center align-items-center px-1">
+            <div class="alertModalTGSI my-2">This groups status is:</div>
+            <button id="alertModalCurrentStatus">TEXT</button>
+            <div id="alertModalStatusText" class="my-2">TEXT</div>
+        </div>
+        <div class="alertDivider"></div>
+        <div id="alertModalChangeWrapper" class="d-flex flex-column justify-content-center align-items-center px-2">
+            <div id="alertChangeLevelLabel" class="alertModalTGSI mt-2 mb-1">CHANGE ALERT LEVEL:</div>
+            <div class="alertChangeConatiners p-1 d-flex flex-column justify-content-center align-items-center noise-a6c">
+                <button id="codeGreenButton" class="alertModalChangeCurrentStatusButton alertGreen mt-1" style="">CODE GREEN</button>
+                <div class="alertModalChangeCurrentStatusDesc my-1" style="">Members of this group are accounted for and can reach the patient.</div>
+            </div>
+            <div class="alertChangeConatiners p-1 d-flex flex-column justify-content-center align-items-center noise-a6c mt-1">
+                <button id="codeYellowButton"  class="alertModalChangeCurrentStatusButton alertYellow mt-1">CODE YELLOW</button>
+                <div class="alertModalChangeCurrentStatusDesc my-1">A nonurgent request to get in contact with the Patient. Sends an Email to all group members.</div>
+            </div>
+            <div class="alertChangeConatiners p-1 d-flex flex-column justify-content-center align-items-center noise-a6c my-1">
+                <button id="codeRedButton"  class="alertModalChangeCurrentStatusButton alertRed mt-1">CODE RED</button>
+                <div class="alertModalChangeCurrentStatusDesc my-1">It's critical that the group gets in touch with the Patient. Sends a SMS and an Email to all group members.</div>
+            </div>
+        </div>
+    </div>
+</div>

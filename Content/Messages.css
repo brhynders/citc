@@ -1,0 +1,87 @@
+﻿.messageDiv {
+    width: 100%;
+    height: 2px;
+    background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(166,203,242,1) 50%, rgba(255,255,255,0) 100%);
+    background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(166,203,242,1) 50%,rgba(255,255,255,0) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(166,203,242,1) 50%,rgba(255,255,255,0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#00ffffff',GradientType=1 );
+}
+
+.messageGrad {
+    background: -moz-linear-gradient(left, rgba(210,229,249,0) 0%, rgba(210,229,249,1) 50%, rgba(255,255,255,0) 100%);
+    background: -webkit-linear-gradient(left, rgba(210,229,249,0) 0%,rgba(210,229,249,1) 50%,rgba(255,255,255,0) 100%);
+    background: linear-gradient(to right, rgba(210,229,249,0) 0%,rgba(210,229,249,1) 50%,rgba(255,255,255,0) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00d2e5f9', endColorstr='#00ffffff',GradientType=1 );
+}
+
+.messageIcon {
+    color: white;
+    font-size: 54px;
+}
+
+.messageContent {
+    cursor: pointer;
+    width: 100%;
+    max-width: 600px;
+    height: 110px;
+}
+
+.messageInfoWrapper {
+    width: 100%;
+    height: 100%;
+}
+
+.messageInfoContainer {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    border-radius: 5px;
+    border: 3px solid white;
+    box-shadow: inset 0px 0px 5px #e9f2fc;
+}
+
+.messageName {
+    width: 100%;
+    height: 30px;
+    background-color: #63a4e9;
+    border-radius: 3px 3px 0px 0px;
+    text-align: center;
+    color: white;
+    font-weight: 600;
+    line-height: 28px;
+    box-shadow: inset 0px 0px 5px #3689e2;
+}
+
+.messageDetails {
+    width: 100%;
+    height: 64px;
+}
+
+.messageIconCont {
+    width: 20%;
+    height: 100%;
+    background-color: #bcd8f5;
+    border-radius: 3px 0px 0px 3px;
+    border: 1px solid #8fbeef;
+    text-align: center;
+    line-height: 50px;
+}
+
+.messageContextCont {
+    width: 80%;
+    height: 100%;
+    border-radius: 0px 3px 3px 0px;
+    border: 1px solid #bcd8f5;
+    border-left: none;
+}
+
+.messageMessage {
+    color: #134b86;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.messageTimeStamp {
+    font-size: 11px;
+    color: #79b1ec;
+}

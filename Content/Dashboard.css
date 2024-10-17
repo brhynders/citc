@@ -1,0 +1,179 @@
+﻿.white-container {
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0px 1px 3px #d2e5f9;
+    border: 1px solid #d2e5f9;
+}
+
+.sm-white-container-header {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px 5px 0px 0px;
+    box-shadow: inset 0px -3px 0px #8fbeef;
+    border-top: 3px solid #fff;
+    border-right: 3px solid #fff;
+    border-left: 3px solid #fff;
+    color: white;
+    text-shadow: 0px 1px 3px #16579c;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 35px;
+    padding-left: 12px;
+}
+
+.sm-white-container-body {
+    padding: 12px 12px;
+    width: 100%;
+    height: auto;
+    box-shadow: inset 0px 1px 5px #bcd8f5;
+    border-radius: 0px 0px 5px 5px;
+    border-right: 3px solid #fff;
+    border-bottom: 3px solid #fff;
+    border-left: 3px solid #fff;
+}
+
+.no-activity {
+    padding:0px;
+    border: 2px solid #d2e5f9;
+    border-radius: 3px;
+    text-align: center;
+    color: #bcd8f5;
+    font-size: 18px;
+    background-color: #ffffff;
+    width: 100%;
+    height: auto;
+}
+
+.lg-white-container-header {
+    width: 100%;
+    height: 40px;
+    border-radius: 5px 5px 0px 0px;
+    box-shadow: inset 0px -3px 0px #3689e2;
+    border-top: 3px solid #fff;
+    border-right: 3px solid #fff;
+    border-left: 3px solid #fff;
+    color: white;
+    text-shadow: 0px 1px 3px #16579c;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 35px;
+    padding-left: 12px;
+}
+
+.lg-white-container-body {
+    padding: 12px 12px;
+    width: 100%;
+    height: auto;
+    box-shadow: inset 0px 1px 5px #bcd8f5;
+    border-radius: 0px 0px 3px 3px;
+    border-right: 3px solid #fff;
+    border-bottom: 3px solid #fff;
+    border-left: 3px solid #fff;
+}
+
+#dashNewPostHeader {
+    border-radius: 0px 3px 3px 0px;
+    background-color: #63a4e9;
+    border-top: 1px solid #79b1ec;
+    border-bottom: 1px solid #79b1ec;
+    border-right: 1px solid #79b1ec;
+    font-size: 16px;
+    font-weight: 600;
+    color: #d2e5f9;
+    width: 100%;
+    height: 100%;
+}
+
+.dashNewPostText {
+    background-color: #fff;
+    width: 100%;
+    height: 100%;
+    border-radius: 3px 0px 0px 3px;
+    border-top: 1px solid #79b1ec;
+    border-right: none;
+    border-bottom: 1px solid #79b1ec;
+    border-left: 1px solid #79b1ec;
+    resize: none;
+}
+.feedHeader {
+    width: 100%;
+    height: 30px;
+    border-radius: 3px 3px 0px 0px;
+    color: white;
+    text-transform: uppercase;
+    line-height: 32px;
+    border: 1px solid #1963b3;
+    box-shadow: inset 0px -2px 8px #1963b3;
+    text-shadow: 0px 1px 3px #16579c;
+}
+
+.feedContent {
+    width: 100%;
+    height: auto;
+    border-left: 1px solid #8fbeef;
+    border-right: 1px solid #8fbeef;
+    font-size: 16px;
+    color: #0a2543;
+}
+
+.feedMessage {
+    background-color: white;
+    border-radius: 3px;
+    border: 1px solid #d2e5f9;
+    box-shadow: 0px 1px 5px #bcd8f5;
+}
+
+.feedFooter {
+    width: 100%;
+    height: 20px;
+    border-radius: 0px 0px 3px 3px;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+    line-height: 18px;
+    text-align: center;
+    border: 1px solid #1963b3;
+    box-shadow: inset 0px 2px 8px #1963b3;
+    text-shadow: 0px 1px 3px #16579c;
+}
+#groupActivityBlip {
+    cursor: pointer;
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    color: white;
+}
+
+#groupActivityBlipIcon {
+    font-size: 36px;
+    width: 70px;
+    height: 100%;
+    text-align: center;
+    line-height: 50px;
+}
+
+#groupActivityBlipNumber {
+    font-size: 24px;
+    font-weight: 600;
+    width: 50px;
+    height: 100%;
+    background-color: #1963b3;
+    line-height: 46px;
+    text-align: center;
+    border-top: 3px solid #0d3259;
+    border-bottom: 3px solid #0d3259
+}
+
+#groupActivityBlipText {
+    font-size: 21px;
+    width: calc(100% - 120px);
+    height: 100%;
+    background-color: #1963b3;
+    line-height: 46px;
+    border-radius: 0px 5px 5px 0px;
+    ;
+    border: 3px solid #0d3259;
+    border-left: none;
+}
